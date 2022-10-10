@@ -14,9 +14,86 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model Movie {
+    id              Int               @id @default(autoincrement())
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    movieId         Int
+    title           String
+    tagLine         String
+    overview        String
+    runtime         Int
+    releaseDate     DateTime
+    rating          MovieRating
+    voteAverage     Float
+    poster          Bytes[]
+    posterType      String
+    backdrop        Bytes[]
+    backdropType    String
+    trailerUrl      String
+    MovieCollection MovieCollection[]
+    MovieCast       MovieCast[]
+    MovieCrew       MovieCrew[]
 }
+
+model Collection {
+    id               Int               @id @default(autoincrement())
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+    name             String
+    description      String
+    MovieCollections MovieCollection[]
+}
+
+model MovieCollection {
+    id           Int        @id @default(autoincrement())
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    collection   Collection @relation(fields: [collectionId], references: [id])
+    collectionId Int
+    movie        Movie      @relation(fields: [movieId], references: [id])
+    movieId      Int
+    order        Int
+}
+
+model MovieCast {
+    id         Int      @id @default(autoincrement())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    movie      Movie    @relation(fields: [movieId], references: [id])
+    movieId    Int
+    castId     Int
+    department String
+    name       String
+    character  String
+    imageUrl   String
+}
+
+model MovieCrew {
+    id         Int      @id @default(autoincrement())
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    movie      Movie    @relation(fields: [movieId], references: [id])
+    movieId    Int
+    crewId     Int
+    department String
+    name       String
+    job        String
+    imageUrl   String
+}
+
+enum MovieRating {
+    G
+    PG
+    PG13
+    R
+    NC17
+    NR
+}
+
+// model Example {
+//     id String @id @default(cuid())
+// }
 
 // Necessary for Next auth
 // model Account {
@@ -45,15 +122,15 @@ model Example {
 //     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 // }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    // accounts      Account[]
-    // sessions      Session[]
-}
+// model User {
+//     id            String    @id @default(cuid())
+//     name          String?
+//     email         String?   @unique
+//     emailVerified DateTime?
+//     image         String?
+// accounts      Account[]
+// sessions      Session[]
+// }
 
 // model VerificationToken {
 //     identifier String
