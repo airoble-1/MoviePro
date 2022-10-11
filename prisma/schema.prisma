@@ -91,9 +91,22 @@ enum MovieRating {
     NR
 }
 
-// model Example {
-//     id String @id @default(cuid())
-// }
+enum Role {
+    ADMIN
+    USER
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    password      String
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    // accounts      Account[]
+    // sessions      Session[]
+    role          Role      @default(USER)
+}
 
 // Necessary for Next auth
 // model Account {
@@ -120,16 +133,6 @@ enum MovieRating {
 //     userId       String
 //     expires      DateTime
 //     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
-// model User {
-//     id            String    @id @default(cuid())
-//     name          String?
-//     email         String?   @unique
-//     emailVerified DateTime?
-//     image         String?
-// accounts      Account[]
-// sessions      Session[]
 // }
 
 // model VerificationToken {
